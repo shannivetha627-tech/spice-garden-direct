@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Phone, Mail, MapPin, Linkedin, MessageCircle } from "lucide-react";
 import { SITE, whatsappUrl } from "@/lib/site";
+import logo from "@/assets/logo.png";
 
 export default function Footer() {
   return (
@@ -9,9 +10,7 @@ export default function Footer() {
       <div className="container-x py-16 grid gap-10 md:grid-cols-4 relative">
         <div className="md:col-span-2">
           <div className="flex items-center gap-2 mb-4">
-            <span className="w-10 h-10 rounded-full gold-gradient flex items-center justify-center font-display font-bold text-background">
-              S
-            </span>
+            <img src={logo} alt="Spice Garden Restaurant" width={48} height={48} className="w-12 h-12 rounded-full object-cover border border-gold/40" />
             <span className="font-display text-xl">
               Spice <span className="text-gold">Garden</span>
             </span>
