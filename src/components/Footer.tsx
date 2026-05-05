@@ -10,7 +10,7 @@ export default function Footer() {
       <div className="container-x py-16 grid gap-10 md:grid-cols-4 relative">
         <div className="md:col-span-2">
           <div className="flex items-center gap-2 mb-4">
-            <img src={logo} alt="Spice Garden Restaurant" width={48} height={48} className="w-12 h-12 rounded-full object-cover border border-gold/40" />
+            <img src={logo} alt="Spice Garden Restaurant" width={56} height={56} className="w-14 h-14 object-contain" />
             <span className="font-display text-xl">
               Spice <span className="text-gold">Garden</span>
             </span>
