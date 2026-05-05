@@ -11,6 +11,9 @@ export default function Footer() {
         <div className="md:col-span-2">
           <div className="flex items-center gap-2 mb-4">
             <img src={logo} alt="Spice Garden Restaurant" width={140} height={140} className="h-20 w-auto object-contain" />
+            <span className="font-display text-xl">
+              Spice <span className="text-gold">Garden</span>
+            </span>
           </div>
           <p className="text-muted-foreground max-w-md text-sm leading-relaxed">
             Fresh, hygienic and tasty food served quickly. Dine-in, delivery,
