@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Phone, Mail, MapPin, MessageCircle, Linkedin, Clock, Send } from "lucide-react";
 import { useState } from "react";
+import { z } from "zod";
+import { toast } from "sonner";
 import PageHero from "@/components/PageHero";
 import { SITE, whatsappUrl } from "@/lib/site";
 
@@ -22,21 +24,77 @@ const channels = [
   { icon: Mail, label: "Email", value: SITE.email, href: `mailto:${SITE.email}`, cta: "Send email" },
 ];
 
+const SERVICES = ["Dine-In Service", "Online Food Ordering", "Home Delivery", "Party Orders", "Takeaway Service"] as const;
+
+const contactSchema = z.object({
+  name: z.string().trim()
+    .min(2, { message: "Please enter your name (at least 2 characters)" })
+    .max(60, { message: "Name must be under 60 characters" })
+    .regex(/^[a-zA-Z\s.'-]+$/, { message: "Name can only contain letters, spaces and . ' -" }),
+  phone: z.string().trim()
+    .regex(/^[6-9]\d{9}$/, { message: "Enter a valid 10-digit Indian mobile number" }),
+  service: z.enum(SERVICES, { message: "Please select a valid service" }),
+  date: z.string().refine((v) => v === "" || !isNaN(Date.parse(v)), { message: "Invalid date" })
+    .refine((v) => v === "" || new Date(v) >= new Date(new Date().toDateString()), { message: "Date can't be in the past" }),
+  people: z.string().refine((v) => v === "" || (/^\d+$/.test(v) && +v >= 1 && +v <= 500), { message: "People must be between 1 and 500" }),
+  message: z.string().trim().max(500, { message: "Message must be under 500 characters" }),
+});
+
+type FormErrors = Partial<Record<keyof z.infer<typeof contactSchema>, string>>;
+
 function ContactPage() {
   const [form, setForm] = useState({ name: "", phone: "", service: "Dine-In Service", date: "", people: "", message: "" });
+  const [errors, setErrors] = useState<FormErrors>({});
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
     setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
 
+  const onBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const field = e.target.name as keyof z.infer<typeof contactSchema>;
+    const next = { ...form, [field]: e.target.value };
+    const result = contactSchema.safeParse(next);
+    setErrors((prev) => {
+      const copy = { ...prev };
+      delete copy[field];
+      if (!result.success) {
+        const issue = result.error.issues.find((i) => i.path[0] === field);
+        if (issue) copy[field] = issue.message;
+      }
+      return copy;
+    });
+  };
+
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const result = contactSchema.safeParse(form);
+    if (!result.success) {
+      const fieldErrors: FormErrors = {};
+      for (const issue of result.error.issues) {
+        const key = issue.path[0] as keyof FormErrors;
+        if (key && !fieldErrors[key]) fieldErrors[key] = issue.message;
+      }
+      setErrors(fieldErrors);
+      toast.error("Please fix the highlighted fields before sending.");
+      return;
+    }
+    setErrors({});
+    const data = result.data;
     const msg = `Hi Spice Garden! I'd like to place an enquiry.
 
-Name: ${form.name}
-Phone: ${form.phone}
-Service: ${form.service}${form.date ? `\nDate: ${form.date}` : ""}${form.people ? `\nPeople: ${form.people}` : ""}${form.message ? `\n\nMessage: ${form.message}` : ""}`;
+Name: ${data.name}
+Phone: ${data.phone}
+Service: ${data.service}${data.date ? `\nDate: ${data.date}` : ""}${data.people ? `\nPeople: ${data.people}` : ""}${data.message ? `\n\nMessage: ${data.message}` : ""}`;
+    toast.success("Opening WhatsApp with your enquiry…");
     window.open(whatsappUrl(msg), "_blank");
   };
+
+  const inputCls = (field: keyof FormErrors, base = "px-4") =>
+    `mt-1.5 w-full bg-background border rounded-xl ${base} py-3 text-sm focus:outline-none transition-colors ${
+      errors[field] ? "border-destructive focus:border-destructive" : "border-gold/20 focus:border-gold"
+    }`;
+
+  const ErrorText = ({ field }: { field: keyof FormErrors }) =>
+    errors[field] ? <p className="mt-1.5 text-xs text-destructive">{errors[field]}</p> : null;
 
   return (
     <>
@@ -114,45 +172,52 @@ Service: ${form.service}${form.date ? `\nDate: ${form.date}` : ""}${form.people 
                 </p>
               </div>
 
-              <form onSubmit={onSubmit} className="md:col-span-3 grid sm:grid-cols-2 gap-4">
+              <form onSubmit={onSubmit} noValidate className="md:col-span-3 grid sm:grid-cols-2 gap-4">
                 <div className="sm:col-span-1">
                   <label className="text-xs uppercase tracking-widest text-muted-foreground">Your Name</label>
-                  <input required name="name" value={form.name} onChange={onChange}
-                    className="mt-1.5 w-full bg-background border border-gold/20 rounded-xl px-4 py-3 text-sm focus:border-gold focus:outline-none transition-colors" />
+                  <input name="name" value={form.name} onChange={onChange} onBlur={onBlur} maxLength={60}
+                    aria-invalid={!!errors.name} className={inputCls("name")} />
+                  <ErrorText field="name" />
                 </div>
                 <div className="sm:col-span-1">
                   <label className="text-xs uppercase tracking-widest text-muted-foreground">Phone</label>
-                  <input required type="tel" name="phone" value={form.phone} onChange={onChange}
-                    className="mt-1.5 w-full bg-background border border-gold/20 rounded-xl px-4 py-3 text-sm focus:border-gold focus:outline-none transition-colors" />
+                  <input type="tel" inputMode="numeric" name="phone" value={form.phone} onChange={onChange} onBlur={onBlur}
+                    maxLength={10} placeholder="10-digit mobile"
+                    aria-invalid={!!errors.phone} className={inputCls("phone")} />
+                  <ErrorText field="phone" />
                 </div>
                 <div className="sm:col-span-1">
                   <label className="text-xs uppercase tracking-widest text-muted-foreground">Service</label>
-                  <select name="service" value={form.service} onChange={onChange}
-                    className="mt-1.5 w-full bg-background border border-gold/20 rounded-xl px-4 py-3 text-sm focus:border-gold focus:outline-none transition-colors">
-                    <option>Dine-In Service</option>
-                    <option>Online Food Ordering</option>
-                    <option>Home Delivery</option>
-                    <option>Party Orders</option>
-                    <option>Takeaway Service</option>
+                  <select name="service" value={form.service} onChange={onChange} onBlur={onBlur}
+                    aria-invalid={!!errors.service} className={inputCls("service")}>
+                    {SERVICES.map((s) => <option key={s}>{s}</option>)}
                   </select>
+                  <ErrorText field="service" />
                 </div>
                 <div className="sm:col-span-1 grid grid-cols-2 gap-3">
                   <div>
                     <label className="text-xs uppercase tracking-widest text-muted-foreground">Date</label>
-                    <input type="date" name="date" value={form.date} onChange={onChange}
-                      className="mt-1.5 w-full bg-background border border-gold/20 rounded-xl px-3 py-3 text-sm focus:border-gold focus:outline-none transition-colors" />
+                    <input type="date" name="date" value={form.date} onChange={onChange} onBlur={onBlur}
+                      min={new Date().toISOString().split("T")[0]}
+                      aria-invalid={!!errors.date} className={inputCls("date", "px-3")} />
+                    <ErrorText field="date" />
                   </div>
                   <div>
                     <label className="text-xs uppercase tracking-widest text-muted-foreground">People</label>
-                    <input type="number" min="1" name="people" value={form.people} onChange={onChange}
-                      className="mt-1.5 w-full bg-background border border-gold/20 rounded-xl px-3 py-3 text-sm focus:border-gold focus:outline-none transition-colors" />
+                    <input type="number" min={1} max={500} name="people" value={form.people} onChange={onChange} onBlur={onBlur}
+                      aria-invalid={!!errors.people} className={inputCls("people", "px-3")} />
+                    <ErrorText field="people" />
                   </div>
                 </div>
                 <div className="sm:col-span-2">
                   <label className="text-xs uppercase tracking-widest text-muted-foreground">Message</label>
-                  <textarea name="message" rows={4} value={form.message} onChange={onChange}
-                    placeholder="Tell us what you'd like to order..."
-                    className="mt-1.5 w-full bg-background border border-gold/20 rounded-xl px-4 py-3 text-sm focus:border-gold focus:outline-none transition-colors resize-none" />
+                  <textarea name="message" rows={4} value={form.message} onChange={onChange} onBlur={onBlur}
+                    maxLength={500} placeholder="Tell us what you'd like to order..."
+                    aria-invalid={!!errors.message} className={`${inputCls("message")} resize-none`} />
+                  <div className="flex justify-between items-center mt-1.5">
+                    <ErrorText field="message" />
+                    <span className="ml-auto text-[10px] uppercase tracking-widest text-muted-foreground">{form.message.length}/500</span>
+                  </div>
                 </div>
                 <div className="sm:col-span-2 flex flex-col sm:flex-row sm:items-center gap-3 pt-2">
                   <button type="submit"
