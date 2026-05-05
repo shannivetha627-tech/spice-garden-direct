@@ -4,6 +4,12 @@ import heroDish from "@/assets/hero-dish.jpg";
 import { SITE, whatsappUrl } from "@/lib/site";
 import SectionCTA from "@/components/SectionCTA";
 import Testimonials from "@/components/Testimonials";
+import imgInterior from "@/assets/sg-interior.jpg";
+import imgChefs from "@/assets/sg-chefs.jpg";
+import imgBiryani from "@/assets/sg-biryani.jpg";
+import imgDelivery from "@/assets/sg-delivery.jpg";
+import imgParty from "@/assets/sg-party.jpg";
+import imgQuality from "@/assets/sg-quality.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -153,6 +159,33 @@ function HomePage() {
       </section>
 
       <Testimonials />
+      <section className="section-padding bg-card/30 border-y border-gold/10">
+        <div className="container-x">
+          <div className="text-center mb-12">
+            <p className="text-gold uppercase tracking-[0.4em] text-xs mb-3">Gallery</p>
+            <h2 className="font-display text-3xl md:text-5xl">A glimpse of <span className="text-gold-gradient">Spice Garden</span></h2>
+            <div className="gold-divider mx-auto mt-6" />
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-5">
+            {[
+              { src: imgInterior, label: "Our Restaurant" },
+              { src: imgChefs, label: "Cooked with Passion" },
+              { src: imgBiryani, label: "Signature Dishes" },
+              { src: imgDelivery, label: "Hot & Fresh Delivery" },
+              { src: imgParty, label: "Party Orders & Catering" },
+              { src: imgQuality, label: "Quality You Can Trust" },
+            ].map((g, i) => (
+              <div key={i} className="group relative aspect-square overflow-hidden rounded-2xl border border-gold/20 hover:border-gold/60 transition-all">
+                <img src={g.src} alt={g.label} loading="lazy" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent opacity-90 group-hover:opacity-100 transition-opacity" />
+                <div className="absolute bottom-3 left-4 right-4">
+                  <p className="font-display text-sm md:text-lg text-gold drop-shadow">{g.label}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
       <SectionCTA />
     </>
   );
