@@ -4,6 +4,7 @@ import appCss from "../styles.css?url";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppFab from "@/components/WhatsAppFab";
+import { Toaster } from "sonner";
 
 function NotFoundComponent() {
   return (
@@ -71,6 +72,7 @@ function RootComponent() {
       </main>
       <Footer />
       <WhatsAppFab />
+      <Toaster richColors position="top-center" theme="dark" />
     </>
   );
 }
