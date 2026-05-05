@@ -28,26 +28,32 @@ export default function Navbar() {
   return (
     <header
       className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
-        scrolled || open
-          ? "bg-background/85 backdrop-blur-xl border-b border-gold/20"
-          : "bg-transparent"
+        scrolled || open ? "bg-background/85 backdrop-blur-xl border-b border-gold/20" : "bg-transparent"
       }`}
     >
-      <nav className="container-x flex items-center justify-between h-16 md:h-20">
+      <nav className="container-x flex items-center justify-between h-16 md:h-24">
         <Link to="/" className="flex items-center gap-2 group">
-          <img src={logo} alt="Spice Garden Restaurant" width={56} height={56} className="h-12 md:h-14 w-auto object-contain" />
+          <img
+            src={logo}
+            alt="Spice Garden Restaurant"
+            width={56}
+            height={56}
+            className="h-10 md:h-12 w-auto object-contain"
+          />
           <span className="font-display text-lg md:text-xl tracking-wide">
             Spice <span className="text-gold">Garden</span>
           </span>
         </Link>
 
-        <ul className="hidden md:flex items-center gap-8">
+        <ul className="hidden md:flex items-center gap-10">
           {links.map((l) => (
             <li key={l.to}>
               <Link
                 to={l.to}
-                className="relative text-sm uppercase tracking-widest text-foreground/80 hover:text-gold transition-colors"
-                activeProps={{ className: "text-gold" }}
+                className="relative text-sm font-medium text-foreground/80 hover:text-gold transition-colors py-2 px-1 uppercase tracking-widest"
+                activeProps={{
+                  className: "text-gold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-gold after:rounded-full",
+                }}
                 activeOptions={{ exact: l.to === "/" }}
               >
                 {l.label}
@@ -56,14 +62,14 @@ export default function Navbar() {
           ))}
         </ul>
 
-        <a
-          href={whatsappUrl()}
-          target="_blank"
-          rel="noreferrer"
-          className="hidden md:inline-flex items-center gap-2 gold-gradient text-background px-5 py-2.5 rounded-full text-sm font-semibold glow-hover"
-        >
-          <MessageCircle className="w-4 h-4" /> Order Now
-        </a>
+        <div className="hidden md:flex items-center gap-6">
+          <Link
+            to="/order"
+            className="inline-flex items-center gap-2 gold-gradient text-background px-6 py-2.5 rounded-full text-sm font-bold glow-hover"
+          >
+            <MessageCircle className="w-4 h-4" /> Order Now
+          </Link>
+        </div>
 
         <button
           aria-label="Menu"
@@ -89,14 +95,12 @@ export default function Navbar() {
                 </Link>
               </li>
             ))}
-            <a
-              href={whatsappUrl()}
-              target="_blank"
-              rel="noreferrer"
+            <Link
+              to="/order"
               className="mt-2 inline-flex justify-center items-center gap-2 gold-gradient text-background px-5 py-3 rounded-full font-semibold"
             >
-              <MessageCircle className="w-4 h-4" /> Order on WhatsApp
-            </a>
+              <MessageCircle className="w-4 h-4" /> Order Now
+            </Link>
           </ul>
         </div>
       )}

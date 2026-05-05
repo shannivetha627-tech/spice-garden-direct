@@ -10,14 +10,19 @@ export default function Footer() {
       <div className="container-x py-16 grid gap-10 md:grid-cols-4 relative">
         <div className="md:col-span-2">
           <div className="flex items-center gap-2 mb-4">
-            <img src={logo} alt="Spice Garden Restaurant" width={140} height={140} className="h-20 w-auto object-contain" />
+            <img
+              src={logo}
+              alt="Spice Garden Restaurant"
+              width={140}
+              height={140}
+              className="h-20 w-auto object-contain"
+            />
             <span className="font-display text-xl">
               Spice <span className="text-gold">Garden</span>
             </span>
           </div>
           <p className="text-muted-foreground max-w-md text-sm leading-relaxed">
-            Fresh, hygienic and tasty food served quickly. Dine-in, delivery,
-            takeaway and party orders — built for working professionals.
+            Spice Garden Restaurant. Fresh food. Quick service. Consistent experience.
           </p>
           <a
             href={whatsappUrl()}
@@ -32,20 +37,53 @@ export default function Footer() {
         <div>
           <h4 className="font-display text-gold text-lg mb-4">Explore</h4>
           <ul className="space-y-2 text-sm text-muted-foreground">
-            <li><Link to="/" className="hover:text-gold">Home</Link></li>
-            <li><Link to="/about" className="hover:text-gold">About</Link></li>
-            <li><Link to="/services" className="hover:text-gold">Services</Link></li>
-            <li><Link to="/contact" className="hover:text-gold">Contact</Link></li>
+            <li>
+              <Link to="/" className="hover:text-gold">
+                Home
+              </Link>
+            </li>
+            <li>
+              <Link to="/about" className="hover:text-gold">
+                About
+              </Link>
+            </li>
+            <li>
+              <Link to="/services" className="hover:text-gold">
+                Services
+              </Link>
+            </li>
+            <li>
+              <Link to="/contact" className="hover:text-gold">
+                Contact
+              </Link>
+            </li>
           </ul>
         </div>
 
         <div>
           <h4 className="font-display text-gold text-lg mb-4">Contact</h4>
           <ul className="space-y-3 text-sm text-muted-foreground">
-            <li className="flex gap-2"><Phone className="w-4 h-4 text-gold mt-0.5" /> <a href={`tel:${SITE.phone}`} className="hover:text-gold">{SITE.phone}</a></li>
-            <li className="flex gap-2"><Mail className="w-4 h-4 text-gold mt-0.5" /> <a href={`mailto:${SITE.email}`} className="hover:text-gold break-all">{SITE.email}</a></li>
-            <li className="flex gap-2"><MapPin className="w-4 h-4 text-gold mt-0.5 shrink-0" /> <span>{SITE.address}</span></li>
-            <li className="flex gap-2"><Linkedin className="w-4 h-4 text-gold mt-0.5" /> <a href={SITE.linkedin} target="_blank" rel="noreferrer" className="hover:text-gold">LinkedIn</a></li>
+            <li className="flex gap-2">
+              <Phone className="w-4 h-4 text-gold mt-0.5" />{" "}
+              <a href={`tel:${SITE.phone}`} className="hover:text-gold">
+                {SITE.phone}
+              </a>
+            </li>
+            <li className="flex gap-2">
+              <Mail className="w-4 h-4 text-gold mt-0.5" />{" "}
+              <a href={`mailto:${SITE.email}`} className="hover:text-gold break-all">
+                {SITE.email}
+              </a>
+            </li>
+            <li className="flex gap-2">
+              <MapPin className="w-4 h-4 text-gold mt-0.5 shrink-0" /> <span>{SITE.address}</span>
+            </li>
+            <li className="flex gap-2">
+              <Linkedin className="w-4 h-4 text-gold mt-0.5" />{" "}
+              <a href={SITE.linkedin} target="_blank" rel="noreferrer" className="hover:text-gold">
+                LinkedIn
+              </a>
+            </li>
           </ul>
         </div>
       </div>

@@ -1,6 +1,23 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { MessageCircle, Phone, Sparkles, ShieldCheck, Clock, Users, Star, Utensils, ShoppingBag, Truck, PartyPopper, Coffee, ArrowRight } from "lucide-react";
-import heroDish from "@/assets/hero-dish.jpg";
+import { useEffect, useState, useRef } from "react";
+import {
+  MessageCircle,
+  Phone,
+  Sparkles,
+  ShieldCheck,
+  Clock,
+  Users,
+  Star,
+  Utensils,
+  ShoppingBag,
+  Truck,
+  PartyPopper,
+  Coffee,
+  ArrowRight,
+  MapPin,
+  Mail,
+  Award,
+} from "lucide-react";
 import { SITE, whatsappUrl } from "@/lib/site";
 import SectionCTA from "@/components/SectionCTA";
 import Testimonials from "@/components/Testimonials";
@@ -10,12 +27,17 @@ import imgBiryani from "@/assets/sg-biryani.jpg";
 import imgDelivery from "@/assets/sg-delivery.jpg";
 import imgParty from "@/assets/sg-party.jpg";
 import imgQuality from "@/assets/sg-quality.jpg";
+import logo from "@/assets/logo.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Spice Garden Restaurant — Fresh Food, Quick Service in Tiruvallur" },
-      { name: "description", content: "Fresh, hygienic and tasty food in Tiruvallur. Dine-in, home delivery, takeaway and party orders. Order quickly on WhatsApp." },
+      {
+        name: "description",
+        content:
+          "Fresh, hygienic and tasty food in Tiruvallur. Dine-in, home delivery, takeaway and party orders. Order quickly on WhatsApp.",
+      },
       { property: "og:title", content: "Spice Garden Restaurant" },
       { property: "og:description", content: "Fresh, hygienic and tasty food. Order on WhatsApp." },
     ],
@@ -23,170 +45,322 @@ export const Route = createFileRoute("/")({
   component: HomePage,
 });
 
-const trust = [
-  { icon: Users, value: "1000+", label: "Customers Served" },
-  { icon: ShieldCheck, value: "100%", label: "Hygienic Cooking" },
-  { icon: Clock, value: "Fast", label: "Quick Service" },
-  { icon: Star, value: "Loved", label: "Consistent Taste" },
-];
+function Counter({ end, duration = 2000, suffix = "" }: { end: number; duration?: number; suffix?: string }) {
+  const [count, setCount] = useState(0);
+  const ref = useRef<HTMLDivElement>(null);
+  const [started, setStarted] = useState(false);
 
-const services = [
-  { icon: Utensils, title: "Dine-In Service", desc: "Enjoy fresh meals in a clean and comfortable restaurant environment." },
-  { icon: ShoppingBag, title: "Online Food Ordering", desc: "Order your favorite dishes easily through WhatsApp or online." },
-  { icon: Truck, title: "Home Delivery", desc: "Get hot and fresh food delivered to your doorstep quickly." },
-  { icon: PartyPopper, title: "Party Orders", desc: "We provide food for small parties, events, and gatherings." },
-  { icon: Coffee, title: "Takeaway Service", desc: "Quick takeaway option for customers on the go." },
-];
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) setStarted(true);
+      },
+      { threshold: 0.5 },
+    );
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
 
-const process = [
-  { n: "01", title: "Send a Message", desc: "Tap WhatsApp and tell us what you'd like to order." },
-  { n: "02", title: "Confirm Your Order", desc: "We confirm the menu, quantity and delivery details." },
-  { n: "03", title: "Fresh & Hygienic", desc: "Our skilled chefs prepare your food fresh." },
-  { n: "04", title: "Enjoy Your Meal", desc: "Dine-in, takeaway or delivered hot to your door." },
-];
+  useEffect(() => {
+    if (!started) return;
+    let start = 0;
+    const increment = end / (duration / 16);
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= end) {
+        setCount(end);
+        clearInterval(timer);
+      } else {
+        setCount(Math.floor(start));
+      }
+    }, 16);
+    return () => clearInterval(timer);
+  }, [started, end, duration]);
+
+  return <div ref={ref}>{count}{suffix}</div>;
+}
 
 function HomePage() {
   return (
     <>
-      <section className="relative min-h-[100vh] flex items-center pt-24 overflow-hidden">
-        <div className="absolute inset-0">
-          <img src={heroDish} alt="" width={1024} height={1024} className="w-full h-full object-cover opacity-40 md:opacity-60" />
-          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/85 to-background/30" />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/60" />
+      {/* 1. HERO SECTION */}
+      <section className="relative h-screen flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <img
+            src={imgInterior}
+            alt="Spice Garden Interior"
+            className="w-full h-full object-cover animate-bg-zoom"
+          />
+          <div className="absolute inset-0 bg-black/70 backdrop-blur-[1px]" />
         </div>
-        <div className="absolute -top-20 -right-20 w-96 h-96 rounded-full bg-gold/15 blur-3xl float-slow" />
 
-        <div className="container-x relative grid md:grid-cols-2 gap-10 items-center py-20">
-          <div>
-            <div className="reveal inline-flex items-center gap-2 border border-gold/30 rounded-full px-4 py-1.5 mb-6 text-xs uppercase tracking-widest text-gold">
-              <Sparkles className="w-3.5 h-3.5" /> Tiruvallur · Fresh Daily
-            </div>
-            <h1 className="reveal reveal-delay-1 font-display text-5xl md:text-7xl lg:text-8xl leading-[1.05]">
-              A Taste That <br />
-              <span className="text-gold-gradient">Feels Like Home.</span>
-            </h1>
-            <p className="reveal reveal-delay-2 mt-6 text-lg text-muted-foreground max-w-xl">
-              Fresh ingredients. Skilled chefs. Quick service. Spice Garden serves
-              hygienic, tasty meals — dine-in, delivery, takeaway and parties.
-            </p>
-            <div className="reveal reveal-delay-3 mt-8 flex flex-col sm:flex-row gap-3">
-              <a href={whatsappUrl()} target="_blank" rel="noreferrer"
-                className="inline-flex items-center justify-center gap-2 gold-gradient text-background px-7 py-3.5 rounded-full font-semibold glow-hover">
-                <MessageCircle className="w-5 h-5" /> Order Now
-              </a>
-              <a href={`tel:${SITE.phone}`}
-                className="inline-flex items-center justify-center gap-2 border border-gold/40 px-7 py-3.5 rounded-full font-semibold hover:bg-gold/10 transition-colors">
-                <Phone className="w-5 h-5 text-gold" /> Call Us
-              </a>
-            </div>
+        <div className="container-x relative z-10 text-center">
+          <div data-aos="fade-down" className="mb-8">
+            <img src={logo} alt="Spice Garden" className="h-28 md:h-36 mx-auto drop-shadow-2xl" />
           </div>
-
-          <div className="relative hidden md:block">
-            <div className="relative aspect-square rounded-full overflow-hidden border-2 border-gold/30 float-slow glow-gold">
-              <img src={heroDish} alt="Featured dish" width={1024} height={1024} className="w-full h-full object-cover" />
-            </div>
-            <div className="absolute -bottom-4 -left-4 bg-card border border-gold/30 rounded-2xl p-4 backdrop-blur-md">
-              <div className="text-3xl font-display text-gold">1000+</div>
-              <div className="text-xs text-muted-foreground uppercase tracking-widest">Happy Customers</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="section-padding border-y border-gold/10 bg-card/30">
-        <div className="container-x">
-          <div className="text-center mb-12">
-            <p className="text-gold uppercase tracking-[0.4em] text-xs mb-3">Why People Trust Us</p>
-            <h2 className="font-display text-3xl md:text-5xl">Built on <span className="text-gold-gradient">taste & trust</span></h2>
-            <div className="gold-divider mx-auto mt-6" />
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-            {trust.map((t, i) => (
-              <div key={i} className="group rounded-2xl border border-gold/20 bg-background/40 p-6 text-center hover:border-gold/60 transition-colors">
-                <div className="mx-auto w-12 h-12 rounded-full gold-gradient flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                  <t.icon className="w-6 h-6 text-background" />
-                </div>
-                <div className="font-display text-2xl md:text-3xl text-gold">{t.value}</div>
-                <div className="text-xs md:text-sm text-muted-foreground uppercase tracking-widest mt-1">{t.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="section-padding">
-        <div className="container-x">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
-            <div>
-              <p className="text-gold uppercase tracking-[0.4em] text-xs mb-3">What We Offer</p>
-              <h2 className="font-display text-3xl md:text-5xl max-w-2xl">Five ways to enjoy <span className="text-gold-gradient">Spice Garden</span></h2>
-            </div>
-            <Link to="/services" className="inline-flex items-center gap-2 text-gold hover:gap-3 transition-all">
-              View all services <ArrowRight className="w-4 h-4" />
+          <h1 data-aos="fade-up" data-aos-delay="200" className="font-display text-4xl md:text-7xl text-white mb-8 max-w-5xl mx-auto leading-tight">
+            Fresh, hygienic meals for <br />
+            <span className="text-gold-gradient text-glow-gold">working professionals.</span>
+          </h1>
+          <p data-aos="fade-up" data-aos-delay="400" className="text-white/80 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
+            Enjoy consistent taste, quick service, and a clean dining experience—whether you dine in or order on the go.
+          </p>
+          <div data-aos="zoom-in" data-aos-delay="600">
+            <Link
+              to="/order"
+              className="inline-flex items-center justify-center gap-2 gold-gradient text-background px-12 py-4 rounded-full font-bold text-lg glow-hover transition-transform hover:scale-110"
+            >
+              <ShoppingBag className="w-6 h-6" /> Order Now
             </Link>
           </div>
+        </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {services.map((s, i) => (
-              <div key={i} className="group relative rounded-2xl border border-gold/20 bg-card p-7 overflow-hidden hover:border-gold/60 transition-all">
-                <div className="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-gold/5 group-hover:bg-gold/15 transition-colors" />
-                <s.icon className="w-9 h-9 text-gold mb-5" />
-                <h3 className="font-display text-2xl mb-2">{s.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{s.desc}</p>
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
+          <div className="w-1 h-10 bg-gradient-to-b from-gold to-transparent rounded-full" />
+        </div>
+      </section>
+
+      {/* 2. TRUST / MISSION SECTION */}
+      <section className="section-padding bg-[#0d0d0d] overflow-hidden">
+        <div className="container-x">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div data-aos="fade-right" className="relative group">
+              <div className="absolute -inset-4 border-2 border-gold/20 rounded-[2rem] translate-x-4 translate-y-4 group-hover:translate-x-0 group-hover:translate-y-0 transition-transform" />
+              <img
+                src={imgChefs}
+                alt="Our Chefs"
+                className="relative z-10 rounded-[2rem] shadow-2xl"
+              />
+              <div className="absolute -bottom-6 -right-6 bg-card border border-gold/30 rounded-2xl px-8 py-6 z-20 shadow-2xl" data-aos="zoom-in" data-aos-delay="400">
+                <div className="font-display text-5xl text-gold mb-1">1000+</div>
+                <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground font-bold">
+                  Customers Served
+                </div>
               </div>
-            ))}
+            </div>
+            <div data-aos="fade-left">
+              <p className="text-gold uppercase tracking-[0.4em] text-xs mb-4">Our Foundation</p>
+              <h2 className="font-display text-4xl md:text-6xl text-white mb-8 leading-tight italic">
+                Built on <span className="text-gold-gradient">Excellence</span>
+              </h2>
+              <p className="text-white/80 text-lg leading-relaxed mb-8">
+                Over 1000+ customers served with fresh, hygienic food. Customer experiences reflect what we focus on—fresh food, timely delivery, and a smooth ordering experience.
+              </p>
+              <div className="grid gap-4">
+                {[
+                  "Clean and well-maintained kitchen practices",
+                  "Consistent taste across every order",
+                  "Quick and reliable service",
+                  "Skilled chefs with experience",
+                ].map((point, i) => (
+                  <div key={i} className="flex items-center gap-4 text-white/90 group">
+                    <div className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center shrink-0 group-hover:bg-gold transition-colors">
+                      <ShieldCheck className="w-3.5 h-3.5 text-gold group-hover:text-background transition-colors" />
+                    </div>
+                    <span className="font-medium text-sm md:text-base">{point}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="section-padding bg-card/30 border-y border-gold/10">
+      {/* 3. SERVICES GRID */}
+      <section className="section-padding bg-[#0a0a0a]">
         <div className="container-x">
-          <div className="text-center mb-14">
-            <p className="text-gold uppercase tracking-[0.4em] text-xs mb-3">How It Works</p>
-            <h2 className="font-display text-3xl md:text-5xl">From craving to <span className="text-gold-gradient">your table</span></h2>
+          <div className="text-center mb-16" data-aos="fade-up">
+            <p className="text-gold uppercase tracking-[0.4em] text-xs mb-3">What We Offer</p>
+            <h2 className="font-display text-4xl md:text-6xl text-white italic">
+              Our <span className="text-gold-gradient">Services</span>
+            </h2>
             <div className="gold-divider mx-auto mt-6" />
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {process.map((p, i) => (
-              <div key={i} className="relative rounded-2xl border border-gold/20 bg-background/60 p-6 hover:-translate-y-1 transition-transform">
-                <div className="font-display text-5xl text-gold/30 mb-3">{p.n}</div>
-                <h3 className="font-display text-xl mb-2">{p.title}</h3>
-                <p className="text-sm text-muted-foreground">{p.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      <Testimonials />
-      <section className="section-padding bg-card/30 border-y border-gold/10">
-        <div className="container-x">
-          <div className="text-center mb-12">
-            <p className="text-gold uppercase tracking-[0.4em] text-xs mb-3">Gallery</p>
-            <h2 className="font-display text-3xl md:text-5xl">A glimpse of <span className="text-gold-gradient">Spice Garden</span></h2>
-            <div className="gold-divider mx-auto mt-6" />
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-5">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
-              { src: imgInterior, label: "Our Restaurant" },
-              { src: imgChefs, label: "Cooked with Passion" },
-              { src: imgBiryani, label: "Signature Dishes" },
-              { src: imgDelivery, label: "Hot & Fresh Delivery" },
-              { src: imgParty, label: "Party Orders & Catering" },
-              { src: imgQuality, label: "Quality You Can Trust" },
-            ].map((g, i) => (
-              <div key={i} className="group relative aspect-square overflow-hidden rounded-2xl border border-gold/20 hover:border-gold/60 transition-all">
-                <img src={g.src} alt={g.label} loading="lazy" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent opacity-90 group-hover:opacity-100 transition-opacity" />
-                <div className="absolute bottom-3 left-4 right-4">
-                  <p className="font-display text-sm md:text-lg text-gold drop-shadow">{g.label}</p>
+              {
+                icon: Utensils,
+                title: "Dine-In Service",
+                desc: "Enjoy your meals in a clean and comfortable setting. Designed for a relaxed break from your workday with consistent food quality.",
+                img: imgInterior,
+              },
+              {
+                icon: MessageCircle,
+                title: "Online Food Ordering",
+                desc: "Order your meals easily through WhatsApp. Quick ordering process that saves time during busy schedules.",
+                img: imgBiryani,
+              },
+              {
+                icon: Truck,
+                title: "Home Delivery",
+                desc: "Get hot and fresh food delivered to your doorstep. Reliable delivery ensures your food arrives on time and ready to eat.",
+                img: imgDelivery,
+              },
+              {
+                icon: PartyPopper,
+                title: "Party Orders",
+                desc: "Food prepared for small gatherings and events. Organized service that handles your group food needs without hassle.",
+                img: imgParty,
+              },
+              {
+                icon: Coffee,
+                title: "Takeaway Service",
+                desc: "Pick up your food quickly without waiting. Ideal for professionals who need fast and convenient meal options.",
+                img: imgDelivery,
+              },
+            ].map((s, i) => (
+              <div
+                key={i}
+                data-aos="fade-up"
+                data-aos-delay={i * 100}
+                className="group relative bg-[#151515] rounded-[2rem] overflow-hidden border border-gold/5 hover:border-gold/30 transition-all hover:-translate-y-2"
+              >
+                <div className="aspect-video overflow-hidden">
+                  <img src={s.img} alt={s.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                </div>
+                <div className="p-8">
+                  <div className="w-12 h-12 rounded-xl gold-gradient flex items-center justify-center mb-6 -mt-14 relative z-10 shadow-2xl">
+                    <s.icon className="w-6 h-6 text-background" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-3">{s.title}</h3>
+                  <p className="text-muted-foreground text-sm leading-relaxed">{s.desc}</p>
                 </div>
               </div>
             ))}
           </div>
         </div>
       </section>
-      <SectionCTA />
+
+      {/* 4. PROCESS SECTION */}
+      <section className="section-padding bg-[#0d0d0d] border-y border-gold/10">
+        <div className="container-x">
+          <div className="text-center mb-20" data-aos="fade-up">
+            <p className="text-gold uppercase tracking-[0.4em] text-xs mb-3">How It Works</p>
+            <h2 className="font-display text-4xl md:text-6xl text-white italic">
+              Our <span className="text-gold-gradient">Process</span>
+            </h2>
+            <div className="gold-divider mx-auto mt-6" />
+          </div>
+
+          <div className="grid md:grid-cols-4 gap-12 relative">
+            <div className="hidden md:block absolute top-10 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-gold/20 to-transparent z-0" />
+            {[
+              { step: "1", title: "Discovery", desc: "Understand your order requirements—whether dine-in, takeaway, or delivery." },
+              { step: "2", title: "Strategy", desc: "Plan preparation based on your order type to ensure speed and consistency." },
+              { step: "3", title: "Execution", desc: "Food is prepared fresh with hygiene and taste as priorities." },
+              { step: "4", title: "Delivery / Service", desc: "Served quickly at the restaurant or delivered hot to your location." },
+            ].map((p, i) => (
+              <div key={i} className="relative z-10 text-center" data-aos="fade-up" data-aos-delay={i * 200}>
+                <div className="w-20 h-20 rounded-full bg-background border-4 border-gold/30 flex items-center justify-center mx-auto mb-8 font-display text-3xl text-gold shadow-[0_0_20px_rgba(212,175,55,0.2)]">
+                  {p.step}
+                </div>
+                <h3 className="text-xl font-bold text-white mb-4">{p.title}</h3>
+                <p className="text-muted-foreground text-sm leading-relaxed">{p.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 5. ACHIEVEMENTS (ANIMATED NUMBERS) */}
+      <section className="py-20 bg-[#0a0a0a] relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10 pointer-events-none">
+          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,var(--gold)_1px,transparent_1px)] bg-[length:32px_32px]" />
+        </div>
+        <div className="container-x relative z-10">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              { icon: Users, value: 1000, label: "Happy Customers", suffix: "+" },
+              { icon: Award, value: 15, label: "Awards Won", suffix: "+" },
+              { icon: Utensils, value: 50, label: "Daily Dishes", suffix: "+" },
+              { icon: Clock, value: 24, label: "Service Hours", suffix: "/7" },
+            ].map((stat, i) => (
+              <div key={i} className="text-center group" data-aos="zoom-in" data-aos-delay={i * 100}>
+                <div className="w-20 h-20 rounded-full bg-gold/10 flex items-center justify-center mx-auto mb-6 group-hover:scale-125 group-hover:bg-gold/20 transition-all">
+                  <stat.icon className="w-10 h-10 text-gold" />
+                </div>
+                <div className="text-4xl md:text-6xl font-display text-gold mb-2 drop-shadow-[0_0_10px_rgba(212,175,55,0.3)]">
+                  <Counter end={stat.value} suffix={stat.suffix} />
+                </div>
+                <p className="text-white/70 font-bold uppercase tracking-widest text-[10px]">
+                  {stat.label}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 6. TESTIMONIALS */}
+      <section data-aos="fade-up" className="py-12 bg-[#0d0d0d]">
+        <Testimonials />
+      </section>
+
+      {/* 7. CONTACT / MAP */}
+      <section className="section-padding bg-[#0a0a0a]">
+        <div className="container-x">
+          <div className="grid lg:grid-cols-2 gap-16">
+            <div data-aos="fade-right">
+              <p className="text-gold uppercase tracking-[0.4em] text-xs mb-3">Find Us</p>
+              <h2 className="font-display text-4xl md:text-6xl text-white italic mb-10">
+                Get In <span className="text-gold-gradient">Touch</span>
+              </h2>
+              <div className="space-y-8">
+                {[
+                  { icon: MapPin, title: "Our Location", value: SITE.address },
+                  { icon: Phone, title: "Phone Number", value: SITE.phone },
+                  { icon: Mail, title: "Email Address", value: SITE.email },
+                ].map((item, i) => (
+                  <div key={i} className="flex gap-6 items-start group">
+                    <div className="w-14 h-14 rounded-2xl bg-gold/10 flex items-center justify-center shrink-0 group-hover:bg-gold/20 transition-colors">
+                      <item.icon className="w-7 h-7 text-gold group-hover:animate-bounce" />
+                    </div>
+                    <div>
+                      <h4 className="text-gold font-bold uppercase tracking-widest text-xs mb-1">{item.title}</h4>
+                      <p className="text-white text-lg">{item.value}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-12">
+                <Link
+                  to="/order"
+                  className="inline-flex items-center justify-center gap-2 gold-gradient text-background px-10 py-4 rounded-full font-bold animate-pulse-gold hover:animate-none"
+                >
+                  <MessageCircle className="w-6 h-6" /> Order Now
+                </Link>
+              </div>
+            </div>
+            <div data-aos="fade-left" className="h-[500px] rounded-[3rem] overflow-hidden border border-gold/20 shadow-2xl relative">
+              <iframe
+                title="Google Maps"
+                src={`https://maps.google.com/maps?q=${encodeURIComponent(SITE.address)}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
+                className="w-full h-full grayscale invert opacity-80"
+                loading="lazy"
+              ></iframe>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 8. CTA SECTION */}
+      <section className="section-padding bg-[#0d0d0d] relative overflow-hidden">
+        <div className="container-x text-center" data-aos="zoom-in">
+           <h2 className="font-display text-4xl md:text-7xl text-white mb-8 italic">
+            Skip the wait. <br />
+            <span className="text-gold-gradient">Get your food fresh and fast.</span>
+          </h2>
+          <Link
+            to="/order"
+            className="inline-flex items-center justify-center gap-2 gold-gradient text-background px-12 py-5 rounded-full font-bold text-xl glow-hover transition-transform hover:scale-110 shadow-2xl shadow-gold/20"
+          >
+            <ShoppingBag className="w-6 h-6" /> Order Now
+          </Link>
+        </div>
+      </section>
     </>
   );
 }
+
+export default HomePage;

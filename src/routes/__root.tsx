@@ -16,7 +16,10 @@ function NotFoundComponent() {
           The page you're looking for doesn't exist.
         </p>
         <div className="mt-6">
-          <Link to="/" className="inline-flex items-center justify-center rounded-full gold-gradient text-background px-5 py-2.5 text-sm font-semibold">
+          <Link
+            to="/"
+            className="inline-flex items-center justify-center rounded-full gold-gradient text-background px-5 py-2.5 text-sm font-semibold"
+          >
             Go home
           </Link>
         </div>
@@ -31,7 +34,11 @@ export const Route = createRootRoute({
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Spice Garden Restaurant — Fresh, Hygienic Food in Tiruvallur" },
-      { name: "description", content: "Spice Garden Restaurant serves fresh, hygienic and tasty food in Tiruvallur. Dine-in, delivery, takeaway & party orders. Order on WhatsApp." },
+      {
+        name: "description",
+        content:
+          "Spice Garden Restaurant serves fresh, hygienic and tasty food in Tiruvallur. Dine-in, delivery, takeaway & party orders. Order on WhatsApp.",
+      },
       { property: "og:title", content: "Spice Garden Restaurant" },
       { property: "og:description", content: "Fresh, hygienic, quick. Order on WhatsApp today." },
       { property: "og:type", content: "website" },
@@ -63,11 +70,25 @@ function RootShell({ children }: { children: React.ReactNode }) {
   );
 }
 
+import { useEffect } from "react";
+import "aos/dist/aos.css";
+
 function RootComponent() {
+  useEffect(() => {
+    import("aos").then((AOS) => {
+      AOS.default.init({
+        duration: 1000,
+        once: false,
+        mirror: true,
+        easing: "ease-in-out",
+      });
+    });
+  }, []);
+
   return (
     <>
       <Navbar />
-      <main className="min-h-screen">
+      <main className="min-h-screen overflow-x-hidden">
         <Outlet />
       </main>
       <Footer />
