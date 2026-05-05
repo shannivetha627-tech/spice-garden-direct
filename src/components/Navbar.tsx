@@ -35,8 +35,8 @@ export default function Navbar() {
     >
       <nav className="container-x flex items-center justify-between h-16 md:h-20">
         <Link to="/" className="flex items-center gap-2 group">
-          <img src={logo} alt="Spice Garden Restaurant" width={40} height={40} className="w-10 h-10 rounded-full object-cover border border-gold/40" />
-          <span className="font-display text-lg md:text-xl tracking-wide">
+          <img src={logo} alt="Spice Garden Restaurant" width={44} height={44} className="w-11 h-11 object-contain" />
+          <span className="font-display text-lg md:text-xl tracking-wide hidden sm:inline">
             Spice <span className="text-gold">Garden</span>
           </span>
         </Link>

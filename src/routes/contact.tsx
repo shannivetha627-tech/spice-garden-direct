@@ -85,7 +85,13 @@ Name: ${data.name}
 Phone: ${data.phone}
 Service: ${data.service}${data.date ? `\nDate: ${data.date}` : ""}${data.people ? `\nPeople: ${data.people}` : ""}${data.message ? `\n\nMessage: ${data.message}` : ""}`;
     toast.success("Opening WhatsApp with your enquiry…");
-    window.open(whatsappUrl(msg), "_blank");
+    const a = document.createElement("a");
+    a.href = whatsappUrl(msg);
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
   };
 
   const inputCls = (field: keyof FormErrors, base = "px-4") =>
