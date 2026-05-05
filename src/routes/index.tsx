@@ -152,6 +152,7 @@ function HomePage() {
         </div>
       </section>
 
+      <Testimonials />
       <SectionCTA />
     </>
   );
