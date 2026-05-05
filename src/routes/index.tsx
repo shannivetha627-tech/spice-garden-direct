@@ -3,6 +3,7 @@ import { MessageCircle, Phone, Sparkles, ShieldCheck, Clock, Users, Star, Utensi
 import heroDish from "@/assets/hero-dish.jpg";
 import { SITE, whatsappUrl } from "@/lib/site";
 import SectionCTA from "@/components/SectionCTA";
+import Testimonials from "@/components/Testimonials";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -151,6 +152,7 @@ function HomePage() {
         </div>
       </section>
 
+      <Testimonials />
       <SectionCTA />
     </>
   );

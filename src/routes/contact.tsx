@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Phone, Mail, MapPin, MessageCircle, Linkedin, Clock } from "lucide-react";
+import { Phone, Mail, MapPin, MessageCircle, Linkedin, Clock, Send } from "lucide-react";
+import { useState } from "react";
 import PageHero from "@/components/PageHero";
 import { SITE, whatsappUrl } from "@/lib/site";
 
@@ -22,6 +23,21 @@ const channels = [
 ];
 
 function ContactPage() {
+  const [form, setForm] = useState({ name: "", phone: "", service: "Dine-In Service", date: "", people: "", message: "" });
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
+    setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
+
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const msg = `Hi Spice Garden! I'd like to place an enquiry.
+
+Name: ${form.name}
+Phone: ${form.phone}
+Service: ${form.service}${form.date ? `\nDate: ${form.date}` : ""}${form.people ? `\nPeople: ${form.people}` : ""}${form.message ? `\n\nMessage: ${form.message}` : ""}`;
+    window.open(whatsappUrl(msg), "_blank");
+  };
+
   return (
     <>
       <PageHero
@@ -77,6 +93,77 @@ function ContactPage() {
                 className="inline-flex items-center gap-2 border border-gold/40 px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-gold/10 transition-colors">
                 <Linkedin className="w-4 h-4 text-gold" /> LinkedIn
               </a>
+            </div>
+          </div>
+        </div>
+
+        {/* ENQUIRY FORM */}
+        <div className="container-x mt-10">
+          <div className="rounded-3xl border border-gold/30 bg-card/70 p-7 md:p-12 relative overflow-hidden">
+            <div className="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-gold/10 blur-3xl" />
+            <div className="relative grid md:grid-cols-5 gap-10">
+              <div className="md:col-span-2">
+                <p className="text-gold uppercase tracking-[0.4em] text-xs mb-3">Send Enquiry</p>
+                <h3 className="font-display text-3xl md:text-4xl mb-4">
+                  Tell us what you'd <span className="text-gold-gradient">like to order</span>
+                </h3>
+                <p className="text-muted-foreground leading-relaxed text-sm">
+                  Fill the form and we'll receive your enquiry instantly on WhatsApp.
+                  Our team responds within minutes to confirm your order, delivery time
+                  or party arrangements.
+                </p>
+              </div>
+
+              <form onSubmit={onSubmit} className="md:col-span-3 grid sm:grid-cols-2 gap-4">
+                <div className="sm:col-span-1">
+                  <label className="text-xs uppercase tracking-widest text-muted-foreground">Your Name</label>
+                  <input required name="name" value={form.name} onChange={onChange}
+                    className="mt-1.5 w-full bg-background border border-gold/20 rounded-xl px-4 py-3 text-sm focus:border-gold focus:outline-none transition-colors" />
+                </div>
+                <div className="sm:col-span-1">
+                  <label className="text-xs uppercase tracking-widest text-muted-foreground">Phone</label>
+                  <input required type="tel" name="phone" value={form.phone} onChange={onChange}
+                    className="mt-1.5 w-full bg-background border border-gold/20 rounded-xl px-4 py-3 text-sm focus:border-gold focus:outline-none transition-colors" />
+                </div>
+                <div className="sm:col-span-1">
+                  <label className="text-xs uppercase tracking-widest text-muted-foreground">Service</label>
+                  <select name="service" value={form.service} onChange={onChange}
+                    className="mt-1.5 w-full bg-background border border-gold/20 rounded-xl px-4 py-3 text-sm focus:border-gold focus:outline-none transition-colors">
+                    <option>Dine-In Service</option>
+                    <option>Online Food Ordering</option>
+                    <option>Home Delivery</option>
+                    <option>Party Orders</option>
+                    <option>Takeaway Service</option>
+                  </select>
+                </div>
+                <div className="sm:col-span-1 grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-xs uppercase tracking-widest text-muted-foreground">Date</label>
+                    <input type="date" name="date" value={form.date} onChange={onChange}
+                      className="mt-1.5 w-full bg-background border border-gold/20 rounded-xl px-3 py-3 text-sm focus:border-gold focus:outline-none transition-colors" />
+                  </div>
+                  <div>
+                    <label className="text-xs uppercase tracking-widest text-muted-foreground">People</label>
+                    <input type="number" min="1" name="people" value={form.people} onChange={onChange}
+                      className="mt-1.5 w-full bg-background border border-gold/20 rounded-xl px-3 py-3 text-sm focus:border-gold focus:outline-none transition-colors" />
+                  </div>
+                </div>
+                <div className="sm:col-span-2">
+                  <label className="text-xs uppercase tracking-widest text-muted-foreground">Message</label>
+                  <textarea name="message" rows={4} value={form.message} onChange={onChange}
+                    placeholder="Tell us what you'd like to order..."
+                    className="mt-1.5 w-full bg-background border border-gold/20 rounded-xl px-4 py-3 text-sm focus:border-gold focus:outline-none transition-colors resize-none" />
+                </div>
+                <div className="sm:col-span-2 flex flex-col sm:flex-row sm:items-center gap-3 pt-2">
+                  <button type="submit"
+                    className="inline-flex items-center justify-center gap-2 gold-gradient text-background px-6 py-3 rounded-full text-sm font-semibold glow-hover">
+                    <Send className="w-4 h-4" /> Send via WhatsApp
+                  </button>
+                  <p className="text-xs text-muted-foreground">
+                    Submitting opens WhatsApp with your enquiry pre-filled.
+                  </p>
+                </div>
+              </form>
             </div>
           </div>
         </div>

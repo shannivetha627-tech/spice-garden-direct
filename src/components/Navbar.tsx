@@ -2,6 +2,7 @@ import { Link, useLocation } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { Menu, X, MessageCircle } from "lucide-react";
 import { SITE, whatsappUrl } from "@/lib/site";
+import logo from "@/assets/logo.png";
 
 const links = [
   { to: "/", label: "Home" },
@@ -34,9 +35,7 @@ export default function Navbar() {
     >
       <nav className="container-x flex items-center justify-between h-16 md:h-20">
         <Link to="/" className="flex items-center gap-2 group">
-          <span className="w-9 h-9 rounded-full gold-gradient flex items-center justify-center font-display font-bold text-background">
-            S
-          </span>
+          <img src={logo} alt="Spice Garden Restaurant" width={40} height={40} className="w-10 h-10 rounded-full object-cover border border-gold/40" />
           <span className="font-display text-lg md:text-xl tracking-wide">
             Spice <span className="text-gold">Garden</span>
           </span>
