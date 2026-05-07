@@ -1,9 +1,10 @@
 import { readFileSync, existsSync } from "fs";
-import { join } from "path";
+import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 import server from "../dist/server/server.js";
 
-const __dirname = join(fileURLToPath(import.meta.url), "..");
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const rootDir = join(__dirname, "..");
 
 const mimeTypes = {
   js: "application/javascript",
@@ -22,7 +23,7 @@ export default async function handler(req, res) {
   try {
     // Try to serve static assets
     if (req.url.startsWith("/assets/")) {
-      const filePath = join(__dirname, "dist", "server", req.url);
+      const filePath = join(rootDir, "dist", "server", req.url);
       if (existsSync(filePath)) {
         const content = readFileSync(filePath);
         const ext = req.url.split(".").pop().toLowerCase();
