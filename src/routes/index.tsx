@@ -27,7 +27,6 @@ import imgBiryani from "@/assets/sg-biryani.jpg";
 import imgDelivery from "@/assets/sg-delivery.jpg";
 import imgParty from "@/assets/sg-party.jpg";
 import imgQuality from "@/assets/sg-quality.jpg";
-import logo from "@/assets/logo.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -45,7 +44,15 @@ export const Route = createFileRoute("/")({
   component: HomePage,
 });
 
-function Counter({ end, duration = 2000, suffix = "" }: { end: number; duration?: number; suffix?: string }) {
+function Counter({
+  end,
+  duration = 2000,
+  suffix = "",
+}: {
+  end: number;
+  duration?: number;
+  suffix?: string;
+}) {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
   const [started, setStarted] = useState(false);
@@ -77,7 +84,12 @@ function Counter({ end, duration = 2000, suffix = "" }: { end: number; duration?
     return () => clearInterval(timer);
   }, [started, end, duration]);
 
-  return <div ref={ref}>{count}{suffix}</div>;
+  return (
+    <div ref={ref}>
+      {count}
+      {suffix}
+    </div>
+  );
 }
 
 function HomePage() {
@@ -95,15 +107,21 @@ function HomePage() {
         </div>
 
         <div className="container-x relative z-10 text-center">
-          <div data-aos="fade-down" className="mb-8">
-            <img src={logo} alt="Spice Garden" className="h-28 md:h-36 mx-auto drop-shadow-2xl" />
-          </div>
-          <h1 data-aos="fade-up" data-aos-delay="200" className="font-display text-4xl md:text-7xl text-white mb-8 max-w-5xl mx-auto leading-tight">
+          <h1
+            data-aos="fade-up"
+            data-aos-delay="200"
+            className="font-display text-4xl md:text-7xl text-white mb-8 max-w-5xl mx-auto leading-tight"
+          >
             Fresh, hygienic meals for <br />
             <span className="text-gold-gradient text-glow-gold">working professionals.</span>
           </h1>
-          <p data-aos="fade-up" data-aos-delay="400" className="text-white/80 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
-            Enjoy consistent taste, quick service, and a clean dining experience—whether you dine in or order on the go.
+          <p
+            data-aos="fade-up"
+            data-aos-delay="400"
+            className="text-white/80 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed"
+          >
+            Enjoy consistent taste, quick service, and a clean dining experience—whether you dine in
+            or order on the go.
           </p>
           <div data-aos="zoom-in" data-aos-delay="600">
             <Link
@@ -131,7 +149,11 @@ function HomePage() {
                 alt="Our Chefs"
                 className="relative z-10 rounded-[2rem] shadow-2xl"
               />
-              <div className="absolute -bottom-6 -right-6 bg-card border border-gold/30 rounded-2xl px-8 py-6 z-20 shadow-2xl" data-aos="zoom-in" data-aos-delay="400">
+              <div
+                className="absolute -bottom-6 -right-6 bg-card border border-gold/30 rounded-2xl px-8 py-6 z-20 shadow-2xl"
+                data-aos="zoom-in"
+                data-aos-delay="400"
+              >
                 <div className="font-display text-5xl text-gold mb-1">1000+</div>
                 <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground font-bold">
                   Customers Served
@@ -144,7 +166,8 @@ function HomePage() {
                 Built on <span className="text-gold-gradient">Excellence</span>
               </h2>
               <p className="text-white/80 text-lg leading-relaxed mb-8">
-                Over 1000+ customers served with fresh, hygienic food. Customer experiences reflect what we focus on—fresh food, timely delivery, and a smooth ordering experience.
+                Over 1000+ customers served with fresh, hygienic food. Customer experiences reflect
+                what we focus on—fresh food, timely delivery, and a smooth ordering experience.
               </p>
               <div className="grid gap-4">
                 {[
@@ -217,7 +240,11 @@ function HomePage() {
                 className="group relative bg-[#151515] rounded-[2rem] overflow-hidden border border-gold/5 hover:border-gold/30 transition-all hover:-translate-y-2"
               >
                 <div className="aspect-video overflow-hidden">
-                  <img src={s.img} alt={s.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                  <img
+                    src={s.img}
+                    alt={s.title}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  />
                 </div>
                 <div className="p-8">
                   <div className="w-12 h-12 rounded-xl gold-gradient flex items-center justify-center mb-6 -mt-14 relative z-10 shadow-2xl">
@@ -246,12 +273,33 @@ function HomePage() {
           <div className="grid md:grid-cols-4 gap-12 relative">
             <div className="hidden md:block absolute top-10 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-gold/20 to-transparent z-0" />
             {[
-              { step: "1", title: "Discovery", desc: "Understand your order requirements—whether dine-in, takeaway, or delivery." },
-              { step: "2", title: "Strategy", desc: "Plan preparation based on your order type to ensure speed and consistency." },
-              { step: "3", title: "Execution", desc: "Food is prepared fresh with hygiene and taste as priorities." },
-              { step: "4", title: "Delivery / Service", desc: "Served quickly at the restaurant or delivered hot to your location." },
+              {
+                step: "1",
+                title: "Discovery",
+                desc: "Understand your order requirements—whether dine-in, takeaway, or delivery.",
+              },
+              {
+                step: "2",
+                title: "Strategy",
+                desc: "Plan preparation based on your order type to ensure speed and consistency.",
+              },
+              {
+                step: "3",
+                title: "Execution",
+                desc: "Food is prepared fresh with hygiene and taste as priorities.",
+              },
+              {
+                step: "4",
+                title: "Delivery / Service",
+                desc: "Served quickly at the restaurant or delivered hot to your location.",
+              },
             ].map((p, i) => (
-              <div key={i} className="relative z-10 text-center" data-aos="fade-up" data-aos-delay={i * 200}>
+              <div
+                key={i}
+                className="relative z-10 text-center"
+                data-aos="fade-up"
+                data-aos-delay={i * 200}
+              >
                 <div className="w-20 h-20 rounded-full bg-background border-4 border-gold/30 flex items-center justify-center mx-auto mb-8 font-display text-3xl text-gold shadow-[0_0_20px_rgba(212,175,55,0.2)]">
                   {p.step}
                 </div>
@@ -276,7 +324,12 @@ function HomePage() {
               { icon: Utensils, value: 50, label: "Daily Dishes", suffix: "+" },
               { icon: Clock, value: 24, label: "Service Hours", suffix: "/7" },
             ].map((stat, i) => (
-              <div key={i} className="text-center group" data-aos="zoom-in" data-aos-delay={i * 100}>
+              <div
+                key={i}
+                className="text-center group"
+                data-aos="zoom-in"
+                data-aos-delay={i * 100}
+              >
                 <div className="w-20 h-20 rounded-full bg-gold/10 flex items-center justify-center mx-auto mb-6 group-hover:scale-125 group-hover:bg-gold/20 transition-all">
                   <stat.icon className="w-10 h-10 text-gold" />
                 </div>
@@ -317,7 +370,9 @@ function HomePage() {
                       <item.icon className="w-7 h-7 text-gold group-hover:animate-bounce" />
                     </div>
                     <div>
-                      <h4 className="text-gold font-bold uppercase tracking-widest text-xs mb-1">{item.title}</h4>
+                      <h4 className="text-gold font-bold uppercase tracking-widest text-xs mb-1">
+                        {item.title}
+                      </h4>
                       <p className="text-white text-lg">{item.value}</p>
                     </div>
                   </div>
@@ -332,7 +387,10 @@ function HomePage() {
                 </Link>
               </div>
             </div>
-            <div data-aos="fade-left" className="h-[500px] rounded-[3rem] overflow-hidden border border-gold/20 shadow-2xl relative">
+            <div
+              data-aos="fade-left"
+              className="h-[500px] rounded-[3rem] overflow-hidden border border-gold/20 shadow-2xl relative"
+            >
               <iframe
                 title="Google Maps"
                 src={`https://maps.google.com/maps?q=${encodeURIComponent(SITE.address)}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
@@ -347,7 +405,7 @@ function HomePage() {
       {/* 8. CTA SECTION */}
       <section className="section-padding bg-[#0d0d0d] relative overflow-hidden">
         <div className="container-x text-center" data-aos="zoom-in">
-           <h2 className="font-display text-4xl md:text-7xl text-white mb-8 italic">
+          <h2 className="font-display text-4xl md:text-7xl text-white mb-8 italic">
             Skip the wait. <br />
             <span className="text-gold-gradient">Get your food fresh and fast.</span>
           </h2>

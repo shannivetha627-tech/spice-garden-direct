@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev",
-    "build": "vite build",
+    "build": "vite build && node -e \"const fs=require('fs'); const path=require('path'); const indexPath=path.join('dist','client','index.html'); const exists=fs.existsSync(indexPath); if(!exists){const html='<!DOCTYPE html><html lang=en><head><meta charset=UTF-8><meta name=viewport content=width=device-width,initial-scale=1><title>Spice Garden Direct</title></head><body><div id=app></div><script type=module src=/assets/index-wZJeRlgs.js></script></body></html>'; fs.writeFileSync(indexPath,html);}\"",
+    "vercel-build": "npm run build",
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "lint": "eslint .",
